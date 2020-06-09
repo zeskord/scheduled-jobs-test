@@ -1,0 +1,29 @@
+{
+  "name": "scheduled-jobs-test",
+  "version": "1.0.0",
+  "description": "Слушает запросы от регламентных заданий. Сигналит, если отваливаются или не из того пути базы.\r Предполагается, что в базе будет внешняя обработка, команда которой висит на регламентном заднии. Эта обработка будет периодически слать запросы.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zeskord/scheduled-jobs-test.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zeskord/scheduled-jobs-test/issues"
+  },
+  "homepage": "https://github.com/zeskord/scheduled-jobs-test#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "nodemailer": "^6.4.8"
+  }
+}

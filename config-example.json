@@ -1,0 +1,20 @@
+{
+    "timeOut": 1800000,
+    "bases": [
+        {
+            "id": "5911ed81-ad9b-43a9-a5ad-1e1037e2c324",
+            "description": "Рабочая База 1С"
+        }
+    ],
+    "emailRecepients": "admin@domain, programmers@domain",
+    "emailFrom": "Контроль регламентов",
+    "mail": {
+        "host": "smtp.ethereal.email",
+        "port": 587,
+        "secure": false,
+        "auth": {
+            "user": "mailuser",
+            "pass": "mailpass"
+        }
+    }
+}
