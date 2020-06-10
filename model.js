@@ -18,11 +18,15 @@ model.init = function () {
     // Сначала просто читаем файл в объект.
     var configString = fs.readFileSync("./config.json", "utf8")
     this.config = JSON.parse(configString)
+    // При инициализации программы запишем в массив базе текущие даты. Как будто в момент инициализации поступил запрос.
+    // Если база лежит, то предупреждение возникнет через время таймаута.
+    var currentDate = new Date()
     // А потом заполняем ассоциативный массив баз, чтобы легче искать было при запросах.
     var rightBases = this.config.bases
     for (var baseInfo of rightBases) {
         model.bases.set(rightBases.id, {
-            description: baseInfo.description
+            description: baseInfo.description,
+            lastRequestTime: currentDate // инициализация, всё-таки.
         })
     }
 
