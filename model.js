@@ -11,6 +11,7 @@ model.config = {}
 // Значение - объект
 //    description - текстовое представление базы
 //    lastRequestTime - время последнего запроса
+//    inactive - база уже не шлет уведомления, о чем уже было отправлено письмо.
 model.bases = new Map()
 
 // Инициализация.
@@ -26,7 +27,8 @@ model.init = function () {
     for (var baseInfo of rightBases) {
         model.bases.set(rightBases.id, {
             description: baseInfo.description,
-            lastRequestTime: currentDate // инициализация, всё-таки.
+            lastRequestTime: currentDate, // инициализация, всё-таки.
+            inactive: false // сначала все базы рабочие.
         })
     }
 
@@ -48,11 +50,20 @@ model.handleRequest = function (body) {
         }
         // А это уже проверка на таймаут.
         if (currentDate - lastRequestTime > model.config.timeOut) {
-            // Регистрируем ошибку.
-            this.sendAlert(baseData)
+            
+            // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
+            if (!baseData.inactive) {
+                // Регистрируем ошибку.
+                this.sendAlert(baseData)
+                // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
+                baseData.inactive = true
+                this.basyes.set(body.baseId, baseData)
+            }
+
         } else {
             // Регистрируем запрос.
             baseData.lastRequestTime = currentDate
+            baseData.inactive = false
             this.bases.set(body.baseId, baseData)
         }
     } else {
