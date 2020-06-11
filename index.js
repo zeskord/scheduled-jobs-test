@@ -12,6 +12,11 @@ app.post('/', urlencodedParser, (req, res) => {
   res.send("OK")
 })
 
+app.post('/mailtest', urlencodedParser, (req, res) => {
+  model.sendAlert({description: "Это просто тест"})
+  res.send("OK")
+})
+
 app.listen(8080)
 
 // Запускаем обработчик ожидания
