@@ -41,6 +41,7 @@ model.init = function () {
 model.handleRequest = function (body) {
     var baseData = this.bases.get(body.baseId)
     console.log(baseData)
+    // Если найдена зарегистрированная база.
     if (baseData !== undefined) {
         var lastRequestTime = baseData.lastRequestTime
         var currentDate = new Date()
@@ -49,25 +50,11 @@ model.handleRequest = function (body) {
             baseData.lastRequestTime = currentDate
             this.bases.set(body.baseId, baseData)
         }
-        // А это уже проверка на таймаут.
-        if (currentDate - lastRequestTime > model.config.timeOut) {
-            console.log("Есть таймаут")
-            // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
-            if (!baseData.inactive) {
-                // Регистрируем ошибку.
-                this.sendAlert(baseData)
-                // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
-                baseData.inactive = true
-                this.basyes.set(body.baseId, baseData)
-            }
-
-        } else {
-            // Регистрируем запрос.
-            baseData.lastRequestTime = currentDate
-            baseData.inactive = false
-            this.bases.set(body.baseId, baseData)
-            console.log("Зарегистирован запрос")
-        }
+        // Регистрируем запрос.
+        baseData.lastRequestTime = currentDate
+        baseData.inactive = false
+        this.bases.set(body.baseId, baseData)
+        console.log("Зарегистирован запрос")
     } else {
         // База не зарегистрирована, но шлет регламентные запросы. Какого хрена? В следующей версии.
         console.log("Запрос из незарегистрированной базы")
@@ -88,6 +75,36 @@ model.sendAlert = function (baseData) {
         console.log("Тут надо зарегистрировать, что сообщение было отправлено, чтобы повторно не отправлять")
     })
 
+}
+
+// Периодическая проверка отвалившихся баз.
+model.checkTimeOut = function () {
+    for (var [baseId, baseData] of model.bases) {
+        var lastRequestTime = baseData.lastRequestTime
+        var currentDate = new Date()
+        // Если дата последнего зарпоса не инициализирована, то при первом обращении ставим текущую.
+        if (lastRequestTime === undefined) {
+            baseData.lastRequestTime = currentDate
+            this.bases.set(baseId, baseData)
+        }
+        // А это уже проверка на таймаут.
+        if (currentDate - lastRequestTime > model.config.timeOut) {
+            console.log("Есть таймаут")
+            // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
+            if (!baseData.inactive) {
+                // Регистрируем ошибку.
+                this.sendAlert(baseData)
+                // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
+                baseData.inactive = true
+                this.basyes.set(baseId, baseData)
+            }
+        }
+    }
+}
+
+// Запускаем регламентное задание.
+model.startSchedule = function () {
+    setInterval(this.checkTimeOut(), this.config.timeOut)
 }
 
 module.exports = model

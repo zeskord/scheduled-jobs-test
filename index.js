@@ -13,3 +13,6 @@ app.post('/', urlencodedParser, (req, res) => {
 })
 
 app.listen(8080)
+
+// Запускаем обработчик ожидания
+model.startSchedule()
