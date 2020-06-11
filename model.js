@@ -40,6 +40,7 @@ model.init = function () {
 // Обрабатываем пингующий запрос.
 model.handleRequest = function (body) {
     var baseData = this.bases.get(body.baseId)
+    console.log(baseData)
     if (baseData !== undefined) {
         var lastRequestTime = baseData.lastRequestTime
         var currentDate = new Date()
@@ -50,7 +51,7 @@ model.handleRequest = function (body) {
         }
         // А это уже проверка на таймаут.
         if (currentDate - lastRequestTime > model.config.timeOut) {
-            
+            console.log("Есть таймаут")
             // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
             if (!baseData.inactive) {
                 // Регистрируем ошибку.
@@ -65,10 +66,11 @@ model.handleRequest = function (body) {
             baseData.lastRequestTime = currentDate
             baseData.inactive = false
             this.bases.set(body.baseId, baseData)
+            console.log("Зарегистирован запрос")
         }
     } else {
         // База не зарегистрирована, но шлет регламентные запросы. Какого хрена? В следующей версии.
-
+        console.log("Запрос из незарегистрированной базы")
     }
 }
 
