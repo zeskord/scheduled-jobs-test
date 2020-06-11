@@ -104,7 +104,7 @@ model.checkTimeOut = function () {
 
 // Запускаем регламентное задание.
 model.startSchedule = function () {
-    setInterval(this.checkTimeOut(), this.config.timeOut)
+    setInterval(this.checkTimeOut, this.config.timeOut)
 }
 
 module.exports = model
