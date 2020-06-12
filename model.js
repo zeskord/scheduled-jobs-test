@@ -83,7 +83,7 @@ model.checkTimeOut = function () {
         // Если дата последнего зарпоса не инициализирована, то при первом обращении ставим текущую.
         if (lastRequestTime === undefined) {
             baseData.lastRequestTime = currentDate
-            this.bases.set(baseId, baseData)
+            model.bases.set(baseId, baseData)
         }
         // А это уже проверка на таймаут.
         if (currentDate - lastRequestTime > model.config.timeOut) {
@@ -91,10 +91,10 @@ model.checkTimeOut = function () {
             // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
             if (!baseData.inactive) {
                 // Регистрируем ошибку.
-                this.sendAlert(baseData)
+                model.sendAlert(baseData)
                 // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
                 baseData.inactive = true
-                this.basyes.set(baseId, baseData)
+                model.bases.set(baseId, baseData)
             }
         }
     }
@@ -103,6 +103,7 @@ model.checkTimeOut = function () {
 // Запускаем регламентное задание.
 model.startSchedule = function () {
     setInterval(this.checkTimeOut, this.config.timeOut)
+    console.log(`Запущена регламентная проверка с интервалом ${this.config.timeOut} миллисекунд.`)
 }
 
 module.exports = model
