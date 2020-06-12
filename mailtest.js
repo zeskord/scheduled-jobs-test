@@ -13,5 +13,5 @@ transporter.sendMail({
 
 }, function (baseData) {
     console.log(baseData)
-    console.log("Тут надо зарегистрировать, что сообщение было отправлено, чтобы повторно не отправлять")
+    console.log("Сообщение не было отпралвено из-за ошибки.")
 })
