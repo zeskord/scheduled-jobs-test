@@ -61,7 +61,7 @@ model.handleRequest = function (body) {
 }
 
 // Обработка превышения допустимого таймаута опредленной базой.
-model.sendAlert = function (baseData) {
+model.sendAlert = function (baseId, baseData) {
 
     this.transporter.sendMail({
         from: model.config.emailFrom,
@@ -70,7 +70,11 @@ model.sendAlert = function (baseData) {
         html: `<p>Да, уже давно не подает сигналов база ${baseData.description}</p>`,
 
     }, function (baseData) {
-        console.log(`Электронное письмо не было отправлено из-за какой-то ошибки с почтой. Очень жаль.`)
+        // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
+        baseData.inactive = true
+        model.bases.set(baseId, baseData)
+        console.log(`Была попытка отправить письмо-уведомление. Возможно, она прошла успешно.`)
+        console.log(baseData)
     })
 
 }
@@ -91,10 +95,8 @@ model.checkTimeOut = function () {
             // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
             if (!baseData.inactive) {
                 // Регистрируем ошибку.
-                model.sendAlert(baseData)
-                // А после регистрации ошибки отмечаем, что по этой базе письмо уже было отправлено.
-                baseData.inactive = true
-                model.bases.set(baseId, baseData)
+                model.sendAlert(baseId, baseData)
+                
             }
         }
     }
