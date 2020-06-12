@@ -66,11 +66,11 @@ model.sendAlert = function (baseData) {
     this.transporter.sendMail({
         from: model.config.emailFrom,
         to: model.config.emailRecepients,
-        subject: "Возможно, сломались регламентные задания 1С",
+        subject: `Возможно, сломались регламентные задания 1С`,
         html: `<p>Да, уже давно не подает сигналов база ${baseData.description}</p>`,
 
     }, function (baseData) {
-        console.log("Электронное письмо не было отправлено из-за какой-то ошибки с почтой. Очень жаль.")
+        console.log(`Электронное письмо не было отправлено из-за какой-то ошибки с почтой. Очень жаль.`)
     })
 
 }
