@@ -9,6 +9,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.post('/', urlencodedParser, (req, res) => {
   model.handleRequest(req.body)
+  console.log(req.body)
   res.send("OK")
 })
 
