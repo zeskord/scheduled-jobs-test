@@ -31,10 +31,8 @@ model.init = function () {
             inactive: false // сначала все базы рабочие.
         })
     }
-
     // Транспортер для почты
     model.transporter = nodemailer.createTransport(model.config.mail)
-
 }
 
 // Обрабатываем пингующий запрос.
@@ -43,7 +41,7 @@ model.handleRequest = function (body) {
     var currentDate = new Date()
 
     console.log(body)
-    console.log(body.baseId)
+    console.log(JSON.parse(body))
     // Если найдена зарегистрированная база.
     if (baseData !== undefined) {
         var lastRequestTime = baseData.lastRequestTime
