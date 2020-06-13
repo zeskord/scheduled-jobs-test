@@ -40,10 +40,10 @@ model.init = function () {
 // Обрабатываем пингующий запрос.
 model.handleRequest = function (body) {
     var baseData = this.bases.get(body.baseId)
+    var currentDate = new Date()
     // Если найдена зарегистрированная база.
     if (baseData !== undefined) {
         var lastRequestTime = baseData.lastRequestTime
-        var currentDate = new Date()
         // Если дата последнего зарпоса не инициализирована, то при первом обращении ставим текущую.
         if (lastRequestTime === undefined) {
             baseData.lastRequestTime = currentDate
@@ -53,10 +53,10 @@ model.handleRequest = function (body) {
         baseData.lastRequestTime = currentDate
         baseData.inactive = false
         this.bases.set(body.baseId, baseData)
-        console.log(`Зарегистирован запрос из базы ${baseData.description}`)
+        console.log(`Зарегистирован запрос из базы ${baseData.description} время ${currentDate}`)
     } else {
         // База не зарегистрирована, но шлет регламентные запросы. Какого хрена? В следующей версии.
-        console.log(`Запрос из незарегистрированной базы ${body.baseId}`)
+        console.log(`Запрос из незарегистрированной базы ${body.baseId} время ${currentDate}`)
     }
 }
 
@@ -116,7 +116,7 @@ model.serializeState = function () {
         }
         sBases.push(base)
     }
-    return sUsers
+    return sBases
 }
 
 module.exports = model
