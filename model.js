@@ -41,7 +41,7 @@ model.handleRequest = function (body) {
     var currentDate = new Date()
 
     console.log(body)
-    console.log(body.baseId)
+    console.log(typeof(body))
     // Если найдена зарегистрированная база.
     if (baseData !== undefined) {
         var lastRequestTime = baseData.lastRequestTime
