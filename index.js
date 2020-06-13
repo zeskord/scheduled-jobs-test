@@ -6,8 +6,9 @@ model.init()
 
 const app = express()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+var JSONparser = bodyParser.json()
 
-app.post('/', urlencodedParser, (req, res) => {
+app.post('/', JSONparser, (req, res) => {
   model.handleRequest(req.body)
   res.send("OK")
 })
