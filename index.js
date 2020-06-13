@@ -17,6 +17,11 @@ app.post('/mailtest', urlencodedParser, (req, res) => {
   res.send("OK")
 })
 
+app.get('/getState', function (req, res) {
+  var state = model.serializeState() 
+  res.send(state)
+})
+
 app.listen(8080)
 
 // Запускаем обработчик ожидания

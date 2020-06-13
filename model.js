@@ -25,7 +25,7 @@ model.init = function () {
     // А потом заполняем ассоциативный массив баз, чтобы легче искать было при запросах.
     var rightBases = this.config.bases
     for (var baseInfo of rightBases) {
-        model.bases.set(rightBases.id, {
+        model.bases.set(baseInfo.id, {
             description: baseInfo.description,
             lastRequestTime: currentDate, // инициализация, всё-таки.
             inactive: false // сначала все базы рабочие.
@@ -102,6 +102,21 @@ model.checkTimeOut = function () {
 model.startSchedule = function () {
     setInterval(this.checkTimeOut, this.config.timeOut)
     console.log(`Запущена регламентная проверка с интервалом ${this.config.timeOut} миллисекунд.`)
+}
+
+// Отладочная информация для администраторов
+model.serializeState = function () {
+    var sBases = []
+    for (var [id, baseData] of model.bases) {
+        base = {
+            id: id,
+            description: baseData.description,
+            lastRequestTime: baseData.lastRequestTime,
+            inactive: baseData.inactive
+        }
+        sBases.push(base)
+    }
+    return sUsers
 }
 
 module.exports = model
