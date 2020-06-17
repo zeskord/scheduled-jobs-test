@@ -2,25 +2,33 @@ const express = require('express')
 const bodyParser = require("body-parser")
 const model = require("./model")
 
+// Инициализируем "God object".
 model.init()
 
 const app = express()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var JSONparser = bodyParser.json()
 
+// Обрабатывает запросы от серверов 1С.
 app.post('/', JSONparser, (req, res) => {
   model.handleRequest(req.body)
-  res.send("OK")
+  res.send(200)
 })
 
-app.post('/mailtest', urlencodedParser, (req, res) => {
+// Отправляет тестовое письмо.
+app.post('/mailtest', JSONparser, (req, res) => {
   model.sendAlert({description: "Это просто тест"})
-  res.send("OK")
+  res.send(200)
 })
 
+// Возвращает отладочную информацию в формате JSON.
 app.get('/getState', function (req, res) {
   var state = model.serializeState() 
   res.send(state)
+})
+
+// Проверка работы, возвращающая код 200.
+app.get('/healthcheck', function (req, res) { 
+  res.send(200)
 })
 
 app.listen(8080)
