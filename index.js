@@ -11,13 +11,13 @@ var JSONparser = bodyParser.json()
 // Обрабатывает запросы от серверов 1С.
 app.post('/', JSONparser, (req, res) => {
   model.handleRequest(req.body)
-  res.send(200)
+  res.status(200)
 })
 
 // Отправляет тестовое письмо.
 app.post('/mailtest', JSONparser, (req, res) => {
   model.sendAlert({description: "Это просто тест"})
-  res.send(200)
+  res.status(200)
 })
 
 // Возвращает отладочную информацию в формате JSON.
@@ -28,7 +28,7 @@ app.get('/getState', function (req, res) {
 
 // Проверка работы, возвращающая код 200.
 app.get('/healthcheck', function (req, res) { 
-  res.send(200)
+  res.status(200)
 })
 
 app.listen(8080)
