@@ -6,6 +6,7 @@ const model = require("./model")
 model.init()
 
 const app = express()
+app.set('json spaces', 4)
 var JSONparser = bodyParser.json()
 
 // Обрабатывает запросы от серверов 1С.
@@ -23,7 +24,7 @@ app.post('/mailtest', JSONparser, (req, res) => {
 // Возвращает отладочную информацию в формате JSON.
 app.get('/getState', function (req, res) {
   var state = model.serializeState() 
-  res.send(state)
+  res.json(state)
 })
 
 // Проверка работы, возвращающая код 200.
