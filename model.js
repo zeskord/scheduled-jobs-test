@@ -62,13 +62,15 @@ model.handleRequest = function (body) {
 // Обработка превышения допустимого таймаута опредленной базой.
 model.sendAlert = function (baseData) {
 
-    console.log(model.transporter)
     model.transporter.sendMail({
         from: model.config.emailFrom,
         to: model.config.emailRecepients,
         subject: `Возможно, сломались регламентные задания 1С`,
         html: `<p>Да, уже давно не подает сигналов база ${baseData.description}</p>`,
 
+    }, (err, info) => {
+        console.log(err)
+        console.log(info)
     })
 
 }
