@@ -16,6 +16,7 @@
         "auth": {
             "user": "mailuser",
             "pass": "mailpass"
-        }
+        },
+        "debug": true
     }
 }
