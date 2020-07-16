@@ -13,5 +13,5 @@ transporter.sendMail({
 
 }, function (baseData) {
     console.log(baseData)
-    console.log("Сообщение не было отпралвено из-за ошибки.")
+    console.log("Сообщение не было отправлено из-за ошибки.")
 })
