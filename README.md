@@ -16,12 +16,16 @@ npm i nexe -g
 nexe index.js
 ```
 
-Запуск службы в Windows
+Установка службы в Windows
 ```
-New-Service -Name "ScheduledJobsTest" -BinaryPathName C:\Git\scheduled-jobs-test\scheduled-jobs-test.exe -DisplayName "1C Мониторинг активности регламентных заданий" -Description "Слушает запросы от регламентных заданий сервера 1С, сообщает, если долго нет запросов."
+nssm install ScheduledJobsTest C:\GIT\scheduled-jobs-test\scheduled-jobs-test.exe
 ```
 
 Удаление службы в Windows
+```
+nssm remove ScheduledJobsTest
+```
+или в PowerShell
 ```
 (Get-WmiObject win32_service -Filter "name='ScheduledJobsTest'").delete()
 ```
