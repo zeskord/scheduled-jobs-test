@@ -19,6 +19,8 @@ nexe index.js
 Установка службы в Windows
 ```
 nssm install ScheduledJobsTest C:\GIT\scheduled-jobs-test\scheduled-jobs-test.exe
+nssm set ScheduledJobsTest DisplayName "1C Мониторинг активности регламентных заданий"
+nssm set ScheduledJobsTest Description "Слушает запросы от регламентных заданий сервера 1С, сообщает, если долго нет запросов."
 ```
 
 Удаление службы в Windows
