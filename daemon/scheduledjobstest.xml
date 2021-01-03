@@ -1,0 +1,31 @@
+<service>
+	<id>scheduledjobstest.exe</id>
+	<name>ScheduledJobsTest</name>
+	<description>Слушает запросы от регламентных заданий сервера 1С, сообщает, если долго нет запросов.</description>
+	<executable>c:\Git\scheduled-jobs-test\scheduled-jobs-test.exe</executable>
+	<argument>--harmony</argument>
+	<argument>C:\snapshot\scheduled-jobs-test\src\node_modules\node-windows\lib\wrapper.js</argument>
+	<argument>--file</argument>
+	<argument>c:\Git\scheduled-jobs-test\index.js</argument>
+	<argument>--scriptoptions=</argument>
+	<argument>--log</argument>
+	<argument>ScheduledJobsTest wrapper</argument>
+	<argument>--grow</argument>
+	<argument>0.25</argument>
+	<argument>--wait</argument>
+	<argument>1</argument>
+	<argument>--maxrestarts</argument>
+	<argument>3</argument>
+	<argument>--abortonerror</argument>
+	<argument>n</argument>
+	<argument>--stopparentfirst</argument>
+	<argument>undefined</argument>
+	<logmode>rotate</logmode>
+	<stoptimeout>30sec</stoptimeout>
+	<serviceaccount>
+		<domain>HOME-PC</domain>
+		<user>LocalSystem</user>
+		<password></password>
+	</serviceaccount>
+	<workingdirectory>c:\Git\scheduled-jobs-test</workingdirectory>
+</service>
