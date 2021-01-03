@@ -22,6 +22,7 @@ model.init = function () {
     // Сначала просто читаем файл в объект.
     var configString = fs.readFileSync("./config.json", "utf8")
     this.config = JSON.parse(configString)
+    model.port = this.config.port
     // При инициализации программы запишем в массив базе текущие даты. Как будто в момент инициализации поступил запрос.
     // Если база лежит, то предупреждение возникнет через время таймаута.
     var currentDate = new Date()

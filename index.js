@@ -32,7 +32,7 @@ app.get('/healthcheck', function (req, res) {
   res.status(200).send("OK")
 })
 
-app.listen(8080)
+app.listen(model.port)
 
 // Запускаем обработчик ожидания
 model.startSchedule()
