@@ -4,6 +4,9 @@ const nodemailer = require("nodemailer")
 
 const model = {}
 
+// Фиксируем время запуска/перезапуска службы.
+model.uptime = new Date()
+
 // Настройки программы
 model.config = {}
 
@@ -52,10 +55,8 @@ model.handleRequest = function (body) {
         baseData.lastRequestTime = currentDate
         baseData.inactive = false
         this.bases.set(body.baseId, baseData)
-        console.log(`Зарегистирован запрос из базы ${baseData.description} время ${currentDate}`)
     } else {
         // База не зарегистрирована, но шлет регламентные запросы. Какого хрена? В следующей версии.
-        console.log(`Запрос из незарегистрированной базы ${body.baseId} время ${currentDate}`)
     }
 }
 
@@ -65,8 +66,8 @@ model.sendAlert = function (baseData) {
     model.transporter.sendMail({
         from: model.config.emailFrom,
         to: model.config.emailRecepients,
-        subject: `Возможно, сломались регламентные задания 1С`,
-        html: `<p>Да, уже давно не подает сигналов база ${baseData.description}</p>`,
+        subject: model.config.ru.subject,
+        html: `<p>${model.config.ru.body} ${baseData.description}</p>`,
 
     }, (err, info) => {
         console.log(err)
@@ -94,7 +95,6 @@ model.checkTimeOut = function () {
                 model.sendAlert(baseData)
                 baseData.inactive = true
                 model.bases.set(baseId, baseData)
-                console.log(`Была попытка отправить письмо-уведомление. Не знаю, насколько успешно.`)
             }
         }
     }

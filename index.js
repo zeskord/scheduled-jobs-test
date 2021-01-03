@@ -17,7 +17,6 @@ app.post('/', JSONparser, (req, res) => {
 
 // Отправляет тестовое письмо.
 app.post('/mailtest', JSONparser, (req, res) => {
-  console.log("Получен запрос на тест почты.")
   model.sendAlert({description: "Это просто тест"})
   res.status(200).send("OK")
 })
