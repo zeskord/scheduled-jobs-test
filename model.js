@@ -56,8 +56,10 @@ model.handleRequest = function (body) {
         baseData.lastRequestTime = currentDate
         baseData.inactive = false
         this.bases.set(body.baseId, baseData)
+        console.log(`Зарегистирован запрос из базы ${baseData.description} время ${currentDate}`)
     } else {
         // База не зарегистрирована, но шлет регламентные запросы. Какого хрена? В следующей версии.
+        console.log(`Запрос из незарегистрированной базы ${body.baseId} время ${currentDate}`)
     }
 }
 
