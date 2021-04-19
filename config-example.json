@@ -1,6 +1,7 @@
 {
     "timeOut": 1800000,
     "port": 8080,
+    "spam": true,
     "bases": [
         {
             "id": "5911ed81-ad9b-43a9-a5ad-1e1037e2c324",

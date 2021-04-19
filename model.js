@@ -93,11 +93,15 @@ model.checkTimeOut = function () {
         if (currentDate - lastRequestTime > model.config.timeOut) {
             console.log(`Есть таймаут ${baseData.description}`)
             // Проверим, может база уже давно висит, и мы уже отправляли по ней уведомление.
+            
             if (!baseData.inactive) {
                 // Регистрируем ошибку.
                 model.sendAlert(baseData)
                 baseData.inactive = true
                 model.bases.set(baseId, baseData)
+            } else if (model.config.spam === true) {
+                // Если база итак лежит, но в настройках включен режим спама, то отправляем уведомление.
+                model.sendAlert(baseData)
             }
         }
     }
