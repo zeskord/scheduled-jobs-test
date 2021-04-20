@@ -1,6 +1,8 @@
 // В этом файле логика программы
 const fs = require('fs')
+const JSON5 = require('json5')
 const nodemailer = require("nodemailer")
+const sendtlg = require('./sendtlg')
 
 const model = {}
 
@@ -20,8 +22,8 @@ model.bases = new Map()
 // Инициализация.
 model.init = function () {
     // Сначала просто читаем файл в объект.
-    var configString = fs.readFileSync("./config.json", "utf8")
-    this.config = JSON.parse(configString)
+    var configString = fs.readFileSync("./config.json5", "utf8")
+    this.config = JSON5.parse(configString)
     model.port = this.config.port
     // При инициализации программы запишем в массив базе текущие даты. Как будто в момент инициализации поступил запрос.
     // Если база лежит, то предупреждение возникнет через время таймаута.
@@ -35,8 +37,12 @@ model.init = function () {
             inactive: false // сначала все базы рабочие.
         })
     }
+    
     // Транспортер для почты
-    model.transporter = nodemailer.createTransport(model.config.mail)
+    if (model.config.mail.enabled === true) { 
+        model.transporter = nodemailer.createTransport(model.config.mail.mailconfig)
+    }
+
 }
 
 // Обрабатываем пингующий запрос.
@@ -66,16 +72,24 @@ model.handleRequest = function (body) {
 // Обработка превышения допустимого таймаута опредленной базой.
 model.sendAlert = function (baseData) {
 
-    model.transporter.sendMail({
-        from: model.config.emailFrom,
-        to: model.config.emailRecepients,
-        subject: model.config.ru.subject,
-        html: `<p>${model.config.ru.body} ${baseData.description}</p>`,
+    if (model.config.mail.enabled === true) {
+        model.transporter.sendMail({
+            from: model.config.emailFrom,
+            to: model.config.emailRecepients,
+            subject: model.config.ru.subject,
+            html: `<p>${model.config.ru.body} ${baseData.description}</p>`,
 
-    }, (err, info) => {
-        console.log(err)
-        console.log(info)
-    })
+        }, (err, info) => {
+            console.log(err)
+            console.log(info)
+        })
+    }
+
+    if (model.config.telegram.enabled === true) {
+        sendtlg(baseData.description)
+
+    }
+    
 
 }
 
