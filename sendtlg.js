@@ -5,17 +5,24 @@ const { Client } = require('tlg')
 var configString = fs.readFileSync("./config.json5", "utf8")
 var config = JSON5.parse(configString)
 
-// main()
+var client
+initClient(client)
 
-var send = async function main(baseDescription) {
-	const client = new Client({
+async function initClient(client) {
+	var client = new Client({
 		apiId: config.telegram.apiId, 
 		apiHash: config.telegram.apiHash
 	})
+	await client.connect('user', config.telegram.phone)
+	// return client
+}
+
+module.exports.telclient = client
+module.exports.telsend = async function main(client, baseDescription) {
 
 	try {
-		await client.connect('user', config.telegram.phone)
-		await client.sendMessage(config.telegram.chatId, `${model.config.ru.subject} ${model.config.ru.body} ${baseDescription}`)
+		
+		await client.sendMessage(config.telegram.chatId, `${config.ru.subject} ${config.ru.body} ${baseDescription}`)
         // var chats = await client.getChats()
 		// for (chatid of chats.chat_ids) {
 			
@@ -24,10 +31,8 @@ var send = async function main(baseDescription) {
 		// }
         // console.log(chats)
 		// await client.close()
-		client.on('__updateMessageSendSucceeded', client.close)
+		client.on('__updateMessageSendSucceeded',  console.log("Сообщение в телеграм отправлено."))
 	} catch(e) {
 		console.error('ERROR', e)
 	}
 }
-
-module.exports = send

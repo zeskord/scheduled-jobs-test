@@ -2,7 +2,8 @@
 const fs = require('fs')
 const JSON5 = require('json5')
 const nodemailer = require("nodemailer")
-// const sendtlg = require('./sendtlg')
+const { Client } = require('tlg')
+// const {telclient, telsend} = require('./sendtlg')
 
 const model = {}
 
@@ -43,6 +44,15 @@ model.init = function () {
         model.transporter = nodemailer.createTransport(model.config.mail.mailconfig)
     }
 
+    // Клиент телеграма
+    if (model.config.telegram.enabled === true) { 
+        model.telclient = new Client({
+            apiId: model.config.telegram.apiId, 
+            apiHash: model.config.telegram.apiHash
+        })
+        model.telclient.connect('user', model.config.telegram.phone)
+    }
+
 }
 
 // Обрабатываем пингующий запрос.
@@ -74,8 +84,8 @@ model.sendAlert = function (baseData) {
 
     if (model.config.mail.enabled === true) {
         model.transporter.sendMail({
-            from: model.config.emailFrom,
-            to: model.config.emailRecepients,
+            from: model.config.mail.emailFrom,
+            to: model.config.mail.emailRecepients,
             subject: model.config.ru.subject,
             html: `<p>${model.config.ru.body} ${baseData.description}</p>`,
 
@@ -86,8 +96,7 @@ model.sendAlert = function (baseData) {
     }
 
     if (model.config.telegram.enabled === true) {
-        // sendtlg(baseData.description)
-
+        model.telsend(baseData.description)
     }
     
 
@@ -123,7 +132,7 @@ model.checkTimeOut = function () {
 
 // Запускаем регламентное задание.
 model.startSchedule = function () {
-    setInterval(this.checkTimeOut, this.config.timeOut)
+    setInterval(model.checkTimeOut, this.config.timeOut)
     console.log(`Запущена регламентная проверка с интервалом ${this.config.timeOut} миллисекунд.`)
 }
 
@@ -140,6 +149,25 @@ model.serializeState = function () {
         sBases.push(base)
     }
     return sBases
+}
+
+model.telsend = async function main(baseDescription) {
+
+	try {
+		
+		await model.telclient.sendMessage(model.config.telegram.chatId, `${model.config.ru.subject} ${model.config.ru.body} ${baseDescription}`)
+        // var chats = await client.getChats()
+		// for (chatid of chats.chat_ids) {
+			
+		// 	chat = await client.getChat(chatid)
+		// 	console.log(chat.id, chat.title)
+		// }
+        // console.log(chats)
+		// await client.close()
+		model.telclient.on('__updateMessageSendSucceeded',  () => {console.log("Сообщение в телеграм отправлено.")})
+	} catch(e) {
+		console.error('ERROR', e)
+	}
 }
 
 module.exports = model
