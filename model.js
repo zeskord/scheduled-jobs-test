@@ -2,7 +2,7 @@
 const fs = require('fs')
 const JSON5 = require('json5')
 const nodemailer = require("nodemailer")
-const sendtlg = require('./sendtlg')
+// const sendtlg = require('./sendtlg')
 
 const model = {}
 
@@ -86,7 +86,7 @@ model.sendAlert = function (baseData) {
     }
 
     if (model.config.telegram.enabled === true) {
-        sendtlg(baseData.description)
+        // sendtlg(baseData.description)
 
     }
     

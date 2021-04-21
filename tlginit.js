@@ -15,16 +15,22 @@ async function main() {
 
 	try {
 		await client.connect('user', config.telegram.phone)
-		await client.sendMessage(config.telegram.chatId, 'Test')
+        // console.log(config.telegram.chatId)
+		// await client.sendMessage(-503357490, 'Test')
+        await client.sendMessage(config.telegram.chatId, 'Test')
+        
         // var chats = await client.getChats()
 		// for (chatid of chats.chat_ids) {
 			
 		// 	chat = await client.getChat(chatid)
 		// 	console.log(chat.id, chat.title)
+        //     console.log(typeof chat.id)
 		// }
         // console.log(chats)
 		// await client.close()
-		client.on('__updateMessageSendSucceeded', client.close)
+		
+        
+        client.on('__updateMessageSendSucceeded', client.close)
 	} catch(e) {
 		console.error('ERROR', e)
 	}
