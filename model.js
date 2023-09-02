@@ -1,9 +1,9 @@
 // В этом файле логика программы
 const fs = require('fs')
-const JSON5 = require('json5')
+// const JSON5 = require('json5')
+const yaml = require('yaml')
 const nodemailer = require("nodemailer")
-const { Client } = require('tlg')
-// const {telclient, telsend} = require('./sendtlg')
+
 
 const model = {}
 
@@ -23,8 +23,9 @@ model.bases = new Map()
 // Инициализация.
 model.init = function () {
     // Сначала просто читаем файл в объект.
-    var configString = fs.readFileSync("./config.json5", "utf8")
-    this.config = JSON5.parse(configString)
+    var configString = fs.readFileSync("./config.yaml", "utf8")
+    this.config = yaml.parse(configString)
+    console.log(this.config)
     model.port = this.config.port
     // При инициализации программы запишем в массив базе текущие даты. Как будто в момент инициализации поступил запрос.
     // Если база лежит, то предупреждение возникнет через время таймаута.
@@ -39,18 +40,18 @@ model.init = function () {
         })
     }
     
-    // Транспортер для почты
+    // Транспортер для почты.
     if (model.config.mail.enabled === true) { 
         model.transporter = nodemailer.createTransport(model.config.mail.mailconfig)
     }
 
     // Клиент телеграма
     if (model.config.telegram.enabled === true) { 
-        model.telclient = new Client({
-            apiId: model.config.telegram.apiId, 
-            apiHash: model.config.telegram.apiHash
-        })
-        model.telclient.connect('user', model.config.telegram.phone)
+        // model.telclient = new Client({
+        //     apiId: model.config.telegram.apiId, 
+        //     apiHash: model.config.telegram.apiHash
+        // })
+        // model.telclient.connect('user', model.config.telegram.phone)
     }
 
 }
@@ -96,7 +97,7 @@ model.sendAlert = function (baseData) {
     }
 
     if (model.config.telegram.enabled === true) {
-        model.telsend(baseData.description)
+        // model.telsend(baseData.description)
     }
     
 
@@ -153,21 +154,21 @@ model.serializeState = function () {
 
 model.telsend = async function main(baseDescription) {
 
-	try {
+	// try {
 		
-		await model.telclient.sendMessage(model.config.telegram.chatId, `${model.config.ru.subject} ${model.config.ru.body} ${baseDescription}`)
-        // var chats = await client.getChats()
-		// for (chatid of chats.chat_ids) {
+	// 	await model.telclient.sendMessage(model.config.telegram.chatId, `${model.config.ru.subject} ${model.config.ru.body} ${baseDescription}`)
+    //     // var chats = await client.getChats()
+	// 	// for (chatid of chats.chat_ids) {
 			
-		// 	chat = await client.getChat(chatid)
-		// 	console.log(chat.id, chat.title)
-		// }
-        // console.log(chats)
-		// await client.close()
-		model.telclient.on('__updateMessageSendSucceeded',  () => {console.log("Сообщение в телеграм отправлено.")})
-	} catch(e) {
-		console.error('ERROR', e)
-	}
+	// 	// 	chat = await client.getChat(chatid)
+	// 	// 	console.log(chat.id, chat.title)
+	// 	// }
+    //     // console.log(chats)
+	// 	// await client.close()
+	// 	model.telclient.on('__updateMessageSendSucceeded',  () => {console.log("Сообщение в телеграм отправлено.")})
+	// } catch(e) {
+	// 	console.error('ERROR', e)
+	// }
 }
 
 module.exports = model

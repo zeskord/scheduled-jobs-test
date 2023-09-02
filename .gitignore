@@ -1,5 +1,6 @@
 config.json
 config.json5
+config.yaml
 
 # Logs
 logs
