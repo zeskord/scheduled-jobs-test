@@ -1,8 +1,9 @@
 // В этом файле логика программы
-const fs = require('fs')
-// const JSON5 = require('json5')
-const yaml = require('yaml')
-const nodemailer = require("nodemailer")
+import { Telegraf } from 'telegraf'
+import nodemailer from "nodemailer"
+import fs from 'fs'
+import yaml from 'yaml'
+
 
 
 const model = {}
@@ -25,7 +26,6 @@ model.init = function () {
     // Сначала просто читаем файл в объект.
     var configString = fs.readFileSync("./config.yaml", "utf8")
     this.config = yaml.parse(configString)
-    console.log(this.config)
     model.port = this.config.port
     // При инициализации программы запишем в массив базе текущие даты. Как будто в момент инициализации поступил запрос.
     // Если база лежит, то предупреждение возникнет через время таймаута.
@@ -47,6 +47,7 @@ model.init = function () {
 
     // Клиент телеграма
     if (model.config.telegram.enabled === true) { 
+        const bot = new Telegraf(model.config.telegram.token)
         // model.telclient = new Client({
         //     apiId: model.config.telegram.apiId, 
         //     apiHash: model.config.telegram.apiHash
@@ -171,4 +172,4 @@ model.telsend = async function main(baseDescription) {
 	// }
 }
 
-module.exports = model
+export default model

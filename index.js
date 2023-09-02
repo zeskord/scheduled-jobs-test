@@ -1,6 +1,6 @@
-const express = require('express')
-const bodyParser = require("body-parser")
-const model = require("./model")
+import express from "express"
+import bodyParser from "body-parser"
+import model from "./model.js"
 
 // Инициализируем "God object".
 model.init()
