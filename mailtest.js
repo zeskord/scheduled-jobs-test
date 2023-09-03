@@ -1,6 +1,6 @@
-const fs = require('fs')
-const JSON5 = require('json5')
-const nodemailer = require("nodemailer")
+import fs from 'fs'
+import yaml from 'yaml'
+import nodemailer from "nodemailer"
 
 var configString = fs.readFileSync("./config.json5", "utf8")
 var config = JSON5.parse(configString)

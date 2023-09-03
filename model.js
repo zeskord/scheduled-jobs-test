@@ -4,8 +4,6 @@ import nodemailer from "nodemailer"
 import fs from 'fs'
 import yaml from 'yaml'
 
-
-
 const model = {}
 
 // Фиксируем время запуска/перезапуска службы.
@@ -42,17 +40,13 @@ model.init = function () {
     
     // Транспортер для почты.
     if (model.config.mail.enabled === true) { 
-        model.transporter = nodemailer.createTransport(model.config.mail.mailconfig)
+        
     }
 
     // Клиент телеграма
     if (model.config.telegram.enabled === true) { 
-        const bot = new Telegraf(model.config.telegram.token)
-        // model.telclient = new Client({
-        //     apiId: model.config.telegram.apiId, 
-        //     apiHash: model.config.telegram.apiHash
-        // })
-        // model.telclient.connect('user', model.config.telegram.phone)
+        model.bot = new Telegraf(model.config.telegram.token)
+        model.bot.launch()
     }
 
 }
@@ -85,6 +79,7 @@ model.handleRequest = function (body) {
 model.sendAlert = function (baseData) {
 
     if (model.config.mail.enabled === true) {
+        model.transporter = nodemailer.createTransport(model.config.mail.mailconfig)
         model.transporter.sendMail({
             from: model.config.mail.emailFrom,
             to: model.config.mail.emailRecepients,
@@ -98,7 +93,7 @@ model.sendAlert = function (baseData) {
     }
 
     if (model.config.telegram.enabled === true) {
-        // model.telsend(baseData.description)
+        model.telsend(baseData.description)
     }
     
 
@@ -155,21 +150,12 @@ model.serializeState = function () {
 
 model.telsend = async function main(baseDescription) {
 
-	// try {
-		
-	// 	await model.telclient.sendMessage(model.config.telegram.chatId, `${model.config.ru.subject} ${model.config.ru.body} ${baseDescription}`)
-    //     // var chats = await client.getChats()
-	// 	// for (chatid of chats.chat_ids) {
-			
-	// 	// 	chat = await client.getChat(chatid)
-	// 	// 	console.log(chat.id, chat.title)
-	// 	// }
-    //     // console.log(chats)
-	// 	// await client.close()
-	// 	model.telclient.on('__updateMessageSendSucceeded',  () => {console.log("Сообщение в телеграм отправлено.")})
-	// } catch(e) {
-	// 	console.error('ERROR', e)
-	// }
+	try {
+		var text = `${model.config.ru.subject}. ${model.config.ru.subject}. Информационня база: ${baseDescription}`
+        await model.bot.telegram.sendMessage(model.config.telegram.chatId, text)
+	} catch(e) {
+		console.error('ERROR', e)
+	}
 }
 
 export default model
