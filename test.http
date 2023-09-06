@@ -1,0 +1,16 @@
+POST http://localhost:8080 HTTP/1.1
+content-type: application/json
+
+{
+    "baseId": "5911ed81-ad9b-43a9-a5ad-1e1037e2c324"
+}
+
+###
+
+GET  http://localhost:8080/getState HTTP/1.1
+content-type: application/json
+
+###
+
+GET  http://localhost:8080/healthcheck HTTP/1.1
+

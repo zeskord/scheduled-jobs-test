@@ -137,7 +137,7 @@ model.startSchedule = function () {
 model.serializeState = function () {
     var sBases = []
     for (var [id, baseData] of model.bases) {
-        base = {
+        var base = {
             id: id,
             description: baseData.description,
             lastRequestTime: baseData.lastRequestTime,
