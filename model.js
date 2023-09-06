@@ -1,9 +1,10 @@
 // В этом файле логика программы
-import { Telegraf } from 'telegraf'
+import telegraf from 'telegraf'
 import nodemailer from "nodemailer"
 import fs from 'fs'
 import yaml from 'yaml'
 
+const {Telegraf} = telegraf
 const model = {}
 
 // Фиксируем время запуска/перезапуска службы.
